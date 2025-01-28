@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/',
+  base: '/firebase-quickstart-js',
   build: {
     rollupOptions: {
       input: ['index.html', 'firebase-messaging-sw.js'],
