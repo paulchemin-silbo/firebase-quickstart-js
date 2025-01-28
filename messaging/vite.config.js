@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
+      // We use injectManifest to use a custom service worker because we need to inject the firebase config in it
+      strategies: 'injectManifest',
+      srcDir: '.',
+      filename: 'sw.ts',
       devOptions: {
         enabled: true,
         type: 'module',
