@@ -6,7 +6,8 @@ import {
   precacheAndRoute,
 } from 'workbox-precaching';
 import { NavigationRoute, registerRoute } from 'workbox-routing';
-import { initFirebase } from './fcm';
+import { initFirebase } from './notifications/fcm';
+import { showNotification } from './notifications/notification';
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -41,8 +42,12 @@ onBackgroundMessage(messaging, (payload) => {
     return;
   }
 
-  self.registration.showNotification('Background Message Title', {
-    body: 'Background Message body.',
-    icon: '/firebase-logo.png',
-  });
+  showNotification(
+    {
+      title: payload.data?.title ?? 'Silbo',
+      body: payload.data?.message ?? '',
+      icon: '/pwa-64x64.png',
+    },
+    { serviceWorkerRegistration: self.registration },
+  );
 });
