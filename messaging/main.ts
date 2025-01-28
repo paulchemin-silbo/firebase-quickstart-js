@@ -1,5 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { MessagePayload, deleteToken, getMessaging, getToken, onMessage } from 'firebase/messaging';
+import {
+  MessagePayload,
+  deleteToken,
+  getMessaging,
+  getToken,
+  onMessage,
+} from 'firebase/messaging';
 import { firebaseConfig, vapidKey } from './config';
 
 initializeApp(firebaseConfig);
@@ -25,24 +31,27 @@ function resetUI() {
   showToken('loading...');
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
-  getToken(messaging, { vapidKey }).then((currentToken) => {
-    if (currentToken) {
-      sendTokenToServer(currentToken);
-      updateUIForPushEnabled(currentToken);
-    } else {
-      // Show permission request.
-      console.log('No registration token available. Request permission to generate one.');
-      // Show permission UI.
-      updateUIForPushPermissionRequired();
+  getToken(messaging, { vapidKey })
+    .then((currentToken) => {
+      if (currentToken) {
+        sendTokenToServer(currentToken);
+        updateUIForPushEnabled(currentToken);
+      } else {
+        // Show permission request.
+        console.log(
+          'No registration token available. Request permission to generate one.',
+        );
+        // Show permission UI.
+        updateUIForPushPermissionRequired();
+        setTokenSentToServer(false);
+      }
+    })
+    .catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+      showToken('Error retrieving registration token.');
       setTokenSentToServer(false);
-    }
-  }).catch((err) => {
-    console.log('An error occurred while retrieving token. ', err);
-    showToken('Error retrieving registration token.');
-    setTokenSentToServer(false);
-  });
+    });
 }
-
 
 function showToken(currentToken: string) {
   // Show token in console and UI.
@@ -59,7 +68,9 @@ function sendTokenToServer(currentToken: string) {
     // TODO(developer): Send the current token to your server.
     setTokenSentToServer(true);
   } else {
-    console.log('Token already sent to server so won\'t send it again unless it changes');
+    console.log(
+      "Token already sent to server so won't send it again unless it changes",
+    );
   }
 }
 
@@ -83,6 +94,7 @@ function showHideDiv(divId: string, show: boolean) {
 function requestPermission() {
   console.log('Requesting permission...');
   Notification.requestPermission().then((permission) => {
+    console.log('Permission: ', permission);
     if (permission === 'granted') {
       console.log('Notification permission granted.');
       // TODO(developer): Retrieve a registration token for use with FCM.
@@ -97,19 +109,23 @@ function requestPermission() {
 
 function deleteTokenFromFirebase() {
   // Delete registration token.
-  getToken(messaging).then((currentToken) => {
-    deleteToken(messaging).then(() => {
-      console.log('Token deleted.', currentToken);
-      setTokenSentToServer(false);
-      // Once token is deleted update UI.
-      resetUI();
-    }).catch((err) => {
-      console.log('Unable to delete token. ', err);
+  getToken(messaging)
+    .then((currentToken) => {
+      deleteToken(messaging)
+        .then(() => {
+          console.log('Token deleted.', currentToken);
+          setTokenSentToServer(false);
+          // Once token is deleted update UI.
+          resetUI();
+        })
+        .catch((err) => {
+          console.log('Unable to delete token. ', err);
+        });
+    })
+    .catch((err) => {
+      console.log('Error retrieving registration token. ', err);
+      showToken('Error retrieving registration token.');
     });
-  }).catch((err) => {
-    console.log('Error retrieving registration token. ', err);
-    showToken('Error retrieving registration token.');
-  });
 }
 
 // Add a message to the messages element.
@@ -143,7 +159,11 @@ function updateUIForPushPermissionRequired() {
   showHideDiv(permissionDivId, true);
 }
 
-document.getElementById('request-permission-button')!.addEventListener('click', requestPermission);
-document.getElementById('delete-token-button')!.addEventListener('click', deleteTokenFromFirebase);
+document
+  .getElementById('request-permission-button')!
+  .addEventListener('click', requestPermission);
+document
+  .getElementById('delete-token-button')!
+  .addEventListener('click', deleteTokenFromFirebase);
 
 resetUI();

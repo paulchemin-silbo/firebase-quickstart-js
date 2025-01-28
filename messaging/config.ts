@@ -1,14 +1,11 @@
 export const firebaseConfig = {
-  // Your web app's Firebase configuration here
-  // See https://firebase.google.com/docs/web/setup#add-sdks-initialize
-  apiKey: 'API_KEY',
-  authDomain: 'PROJECT_ID.firebaseapp.com',
-  databaseURL: 'https://PROJECT_ID.firebaseio.com',
-  projectId: 'PROJECT_ID',
-  storageBucket: 'PROJECT_ID.appspot.com',
-  messagingSenderId: 'SENDER_ID',
-  appId: 'APP_ID',
-  measurementId: 'G-MEASUREMENT_ID'
+  apiKey: 'AIzaSyAH2JIEEwn9GfYpfzlTpvUW4s0LD_iRwJQ',
+  authDomain: 'silbo-patient-transport.firebaseapp.com',
+  projectId: 'silbo-patient-transport',
+  storageBucket: 'silbo-patient-transport.firebasestorage.app',
+  messagingSenderId: '27523190820',
+  appId: '1:27523190820:web:6dcd16ac7bf6ff72e008b1',
 };
 
-export const vapidKey = '<YOUR_PUBLIC_VAPID_KEY_HERE>';
+export const vapidKey =
+  'BFs1O-6MsXDwy0GEZwqDZiKaToqjiAJ23MIuZTYBtj8k0Psr9NqTv4CTwlQJY5oCJYR4RmO7FhsMfeS0k0iMaBs';
