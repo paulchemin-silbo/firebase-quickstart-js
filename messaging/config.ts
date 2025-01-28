@@ -1,11 +1,12 @@
-export const firebaseConfig = {
-  apiKey: 'AIzaSyAH2JIEEwn9GfYpfzlTpvUW4s0LD_iRwJQ',
-  authDomain: 'silbo-patient-transport.firebaseapp.com',
-  projectId: 'silbo-patient-transport',
-  storageBucket: 'silbo-patient-transport.firebasestorage.app',
-  messagingSenderId: '27523190820',
-  appId: '1:27523190820:web:6dcd16ac7bf6ff72e008b1',
-};
-
 export const vapidKey =
-  'BFs1O-6MsXDwy0GEZwqDZiKaToqjiAJ23MIuZTYBtj8k0Psr9NqTv4CTwlQJY5oCJYR4RmO7FhsMfeS0k0iMaBs';
+  'BNzzAggNxmOojT02qwgki86L4FmcISXnaGKEKFhpbeKFWgv-BD8lKCH3bci7N1QucvHWowVR1ezyp7v20FRePmc';
+
+export const firebaseConfig = {
+  apiKey: 'AIzaSyALas5seudUODEpU_fS9mq_rj4kGRV3Ipk',
+  authDomain: 'hello-silbo.firebaseapp.com',
+  projectId: 'hello-silbo',
+  storageBucket: 'hello-silbo.firebasestorage.app',
+  messagingSenderId: '388253311039',
+  appId: '1:388253311039:web:371106f28bd330bd7b988a',
+  measurementId: 'G-9C78TZZPFC',
+};
