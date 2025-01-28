@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { FirebaseApp, initializeApp } from 'firebase/app';
 
 export const vapidKey =
   'BNzzAggNxmOojT02qwgki86L4FmcISXnaGKEKFhpbeKFWgv-BD8lKCH3bci7N1QucvHWowVR1ezyp7v20FRePmc';
@@ -13,6 +13,10 @@ const firebaseConfig = {
   measurementId: 'G-9C78TZZPFC',
 };
 
+let app: FirebaseApp | undefined;
 export function initFirebase() {
-  return initializeApp(firebaseConfig);
+  if (!app) {
+    app = initializeApp(firebaseConfig);
+  }
+  return app;
 }

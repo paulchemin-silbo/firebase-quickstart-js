@@ -5,8 +5,7 @@ import {
   getToken,
   onMessage,
 } from 'firebase/messaging';
-import { vapidKey } from './config';
-import { initFirebase } from './fcm';
+import { initFirebase, vapidKey } from './fcm';
 
 // export function initFirebase() {
 //   return initializeApp(firebaseConfig);
@@ -37,7 +36,7 @@ async function resetUI() {
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
   getToken(getMessaging(), {
-    vapidKey,
+    vapidKey: vapidKey,
     serviceWorkerRegistration: await navigator.serviceWorker.ready,
   })
     .then((currentToken) => {
