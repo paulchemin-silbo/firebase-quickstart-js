@@ -8,8 +8,11 @@ import {
 } from 'firebase/messaging';
 import { firebaseConfig, vapidKey } from './config';
 
-initializeApp(firebaseConfig);
+export function initFirebase() {
+  return initializeApp(firebaseConfig);
+}
 
+initFirebase();
 const messaging = getMessaging();
 
 // IDs of divs that display registration token UI or request permission UI.
