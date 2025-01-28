@@ -1,3 +1,4 @@
+import { initializeApp } from 'firebase/app';
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 import { clientsClaim } from 'workbox-core';
 import {
@@ -6,7 +7,6 @@ import {
   precacheAndRoute,
 } from 'workbox-precaching';
 import { NavigationRoute, registerRoute } from 'workbox-routing';
-import { initFirebase } from './main';
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -31,7 +31,15 @@ try {
 }
 
 // Firebase Messaging
-const app = initFirebase();
+const app = initializeApp({
+  apiKey: 'AIzaSyALas5seudUODEpU_fS9mq_rj4kGRV3Ipk',
+  authDomain: 'hello-silbo.firebaseapp.com',
+  projectId: 'hello-silbo',
+  storageBucket: 'hello-silbo.firebasestorage.app',
+  messagingSenderId: '388253311039',
+  appId: '1:388253311039:web:371106f28bd330bd7b988a',
+  measurementId: 'G-9C78TZZPFC',
+});
 const messaging = getMessaging(app);
 // Handle push notifications when the app is in the background or closed
 onBackgroundMessage(messaging, (payload) => {
