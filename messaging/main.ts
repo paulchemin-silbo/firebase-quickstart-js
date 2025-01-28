@@ -6,7 +6,7 @@ import {
   onMessage,
 } from 'firebase/messaging';
 import { vapidKey } from './config';
-import { initFcm } from './fcm';
+import { initFirebase } from './fcm';
 
 // export function initFirebase() {
 //   return initializeApp(firebaseConfig);
@@ -15,7 +15,7 @@ import { initFcm } from './fcm';
 // initFirebase();
 // const messaging = getMessaging();
 
-initFcm();
+initFirebase();
 
 // IDs of divs that display registration token UI or request permission UI.
 const tokenDivId = 'token_div';
