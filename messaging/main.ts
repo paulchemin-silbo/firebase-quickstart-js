@@ -1,4 +1,3 @@
-import { initializeApp } from 'firebase/app';
 import {
   MessagePayload,
   deleteToken,
@@ -6,14 +5,17 @@ import {
   getToken,
   onMessage,
 } from 'firebase/messaging';
-import { firebaseConfig, vapidKey } from './config';
+import { vapidKey } from './config';
+import { initFcm } from './fcm';
 
-export function initFirebase() {
-  return initializeApp(firebaseConfig);
-}
+// export function initFirebase() {
+//   return initializeApp(firebaseConfig);
+// }
 
-initFirebase();
-const messaging = getMessaging();
+// initFirebase();
+// const messaging = getMessaging();
+
+initFcm();
 
 // IDs of divs that display registration token UI or request permission UI.
 const tokenDivId = 'token_div';
@@ -23,7 +25,7 @@ const permissionDivId = 'permission_div';
 // - a message is received while the app has focus
 // - the user clicks on an app notification created by a service worker
 //   `messaging.onBackgroundMessage` handler.
-onMessage(messaging, (payload) => {
+onMessage(getMessaging(), (payload) => {
   console.log('Message received. ', payload);
   // Update the UI to include the received message.
   appendMessage(payload);
@@ -34,7 +36,7 @@ async function resetUI() {
   showToken('loading...');
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
-  getToken(messaging, {
+  getToken(getMessaging(), {
     vapidKey,
     serviceWorkerRegistration: await navigator.serviceWorker.ready,
   })
@@ -115,9 +117,9 @@ function requestPermission() {
 
 function deleteTokenFromFirebase() {
   // Delete registration token.
-  getToken(messaging)
+  getToken(getMessaging())
     .then((currentToken) => {
-      deleteToken(messaging)
+      deleteToken(getMessaging())
         .then(() => {
           console.log('Token deleted.', currentToken);
           setTokenSentToServer(false);
