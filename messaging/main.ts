@@ -26,12 +26,15 @@ onMessage(messaging, (payload) => {
   appendMessage(payload);
 });
 
-function resetUI() {
+async function resetUI() {
   clearMessages();
   showToken('loading...');
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
-  getToken(messaging, { vapidKey })
+  getToken(messaging, {
+    vapidKey,
+    serviceWorkerRegistration: await navigator.serviceWorker.ready,
+  })
     .then((currentToken) => {
       if (currentToken) {
         sendTokenToServer(currentToken);

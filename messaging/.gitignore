@@ -1,2 +1,5 @@
 dist/
 /.firebase/
+node_modules/
+
+dev-dist
