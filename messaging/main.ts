@@ -3,9 +3,9 @@ import {
   deleteToken,
   getMessaging,
   getToken,
-  onMessage,
 } from 'firebase/messaging';
-import { initFirebase, vapidKey } from './fcm';
+import { initFcm } from './notifications/fcm';
+import { retrieveAndStoreFcmToken } from './notifications/notification';
 
 // export function initFirebase() {
 //   return initializeApp(firebaseConfig);
@@ -14,7 +14,7 @@ import { initFirebase, vapidKey } from './fcm';
 // initFirebase();
 // const messaging = getMessaging();
 
-initFirebase();
+initFcm();
 
 // IDs of divs that display registration token UI or request permission UI.
 const tokenDivId = 'token_div';
@@ -24,40 +24,59 @@ const permissionDivId = 'permission_div';
 // - a message is received while the app has focus
 // - the user clicks on an app notification created by a service worker
 //   `messaging.onBackgroundMessage` handler.
-onMessage(getMessaging(), (payload) => {
-  console.log('Message received. ', payload);
-  // Update the UI to include the received message.
-  appendMessage(payload);
-});
+// onMessage(getMessaging(), (payload) => {
+//   console.log('Message received. ', payload);
+//   // Update the UI to include the received message.
+//   appendMessage(payload);
+// });
 
 async function resetUI() {
   clearMessages();
   showToken('loading...');
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
-  getToken(getMessaging(), {
-    vapidKey: vapidKey,
-    serviceWorkerRegistration: await navigator.serviceWorker.ready,
-  })
-    .then((currentToken) => {
-      if (currentToken) {
-        sendTokenToServer(currentToken);
-        updateUIForPushEnabled(currentToken);
-      } else {
-        // Show permission request.
-        console.log(
-          'No registration token available. Request permission to generate one.',
-        );
-        // Show permission UI.
-        updateUIForPushPermissionRequired();
-        setTokenSentToServer(false);
-      }
-    })
-    .catch((err) => {
-      console.log('An error occurred while retrieving token. ', err);
-      showToken('Error retrieving registration token.');
+  try {
+    const currentToken = await retrieveAndStoreFcmToken();
+    if (currentToken) {
+      sendTokenToServer(currentToken);
+      updateUIForPushEnabled(currentToken);
+    } else {
+      // Show permission request.
+      console.log(
+        'No registration token available. Request permission to generate one.',
+      );
+      // Show permission UI.
+      updateUIForPushPermissionRequired();
       setTokenSentToServer(false);
-    });
+    }
+  } catch (error) {
+    console.error('Error retrieving registration token. ', error);
+    showToken('Error retrieving registration token.');
+    setTokenSentToServer(false);
+  }
+  // getToken(getMessaging(), {
+  //   vapidKey: vapidKey,
+  //   serviceWorkerRegistration: await getServiceWorkerRegistration(),
+  // })
+  //   .then((currentToken) => {
+  //     if (currentToken) {
+  //       sendTokenToServer(currentToken);
+  //       updateUIForPushEnabled(currentToken);
+  //     } else {
+  //       // Show permission request.
+  //       console.log(
+  //         'No registration token available. Request permission to generate one.',
+  //       );
+  //       // Show permission UI.
+  //       updateUIForPushPermissionRequired();
+  //       setTokenSentToServer(false);
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log('An error occurred while retrieving token. ', err);
+  //     showToken('Error retrieving registration token.');
+  //     setTokenSentToServer(false);
+  //   });
 }
 
 function showToken(currentToken: string) {
